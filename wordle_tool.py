@@ -1,6 +1,9 @@
 import re
 
 def get_corpus():
+    """
+    Get the corpus of valid words
+    """
     my_file = open("wordle-answers-alphabetical.txt", "r")
     content = my_file.read()
     corpus = content.split("\n")
@@ -10,6 +13,9 @@ def get_corpus():
 
 def search_corpus(does_not_contain_list, does_contain_list
                  , re_not_like, re_like, corpus):
+    """
+    Search the corpus for conditions
+    """
     matching = [word for word in corpus \
                     if not any(letter in word for letter in does_not_contain_list)
                     if not any(re.findall(exp, word) for exp in re_not_like)
@@ -94,6 +100,9 @@ def contains(guesses, does_contain=True):
 
 
 def main(guesses):
+    """
+    Orchastrate result and ouput results
+    """
     does_contain_list =contains(guesses)
     re_not_like = get_re_not_like(guesses)
     re_like= get_re_like(guesses)
@@ -108,5 +117,8 @@ def main(guesses):
     print(count_tokens(matching,1))
     print( '\n') 
 
-guesses = [('tears', 'bybbb'), ('loves', 'bybyb')]
+guesses = [ ('tears', 'ybbgy'), 
+            #('lying', 'bbgbb'),
+            #('frail', 'bybyb')
+            ]
 main(guesses)
