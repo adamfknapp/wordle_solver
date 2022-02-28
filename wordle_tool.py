@@ -1,24 +1,5 @@
 import re
 
-
-#Scrape data
-"""
-import cloudscraper
-from bs4 import BeautifulSoup
-
-scraper = cloudscraper.create_scraper(browser={'browser': 'firefox','platform': 'windows','mobile': False})
-
-#url = 'http://www.allscrabblewords.com/5-letter-words/'
-url="https://eslforums.com/5-letter-words/"
-html = scraper.get(url).content
-
-soup = BeautifulSoup(html, 'html.parser')
-vals = soup.find_all('li')
-my_list = []
-for val in vals:
-    my_list.append(val.text)
-"""
-
 def get_corpus():
     my_file = open("wordle-answers-alphabetical.txt", "r")
     content = my_file.read()
@@ -36,6 +17,7 @@ def search_corpus(guesses, does_not_contain_list, does_contain_list
                     if re.findall(re_like, word)
                     ]
     return matching
+
 
 def count_tokens(corpus, n):
     """
