@@ -51,14 +51,16 @@ def get_re_like(guesses):
     """
     Return a regular expression for the correct letters
     """
-    guess = list(guesses[-1][0])
-    result = list(guesses[-1][1])
-    re_like = list('.....')
-    for element in range(len(guess)):
-        if result[element] == 'g':
-            re_like[element] = guess[element]
-    re_like = "".join(re_like)
-    return re_like
+    re_like = '.....'
+    for guess in guesses:
+        cur_guess= list(guess[0])
+        cur_result = list(guess[1])
+        re_like =list(re_like)
+        for element in range(len(cur_guess)):
+            if cur_result[element] == 'g':
+               re_like[element] = cur_guess[element]
+               re_like = "".join(re_like)  
+    return "".join(re_like)        
 
 
 def get_re_not_like(guesses):
@@ -96,29 +98,36 @@ def contains(guesses, does_contain=True):
             else:
                 if cur_result[element] == 'b':
                     res.append(cur_guess[element])              
-    return res
+    return list(set(res))
 
 
 def main(guesses):
     """
     Orchastrate result and ouput results
     """
-    does_contain_list =contains(guesses)
+    does_contain_list =contains(guesses, does_contain=True)
     re_not_like = get_re_not_like(guesses)
     re_like= get_re_like(guesses)
     does_not_contain_list= contains (guesses, does_contain=False)
-    corpus = get_corpus()
 
+    print(does_contain_list)
+    print(does_not_contain_list)
+    print(re_like)
+    print(re_not_like)
+
+    corpus = get_corpus()
     matching = search_corpus(does_not_contain_list, does_contain_list
                  , re_not_like, re_like, corpus)
+    tokens = count_tokens(matching,1)
+
+    # Print results
     print('*'*15)
     print(f'{len(matching)} words')
     print(matching)
-    print(count_tokens(matching,1))
+    print(tokens)
     print( '\n') 
 
-guesses = [ ('tears', 'ybbgy'), 
-            #('lying', 'bbgbb'),
-            #('frail', 'bybyb')
+guesses = [ ('tears', 'ybyby'), 
+            ('puree', 'ygygg')
             ]
 main(guesses)
