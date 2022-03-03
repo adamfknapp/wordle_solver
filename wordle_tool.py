@@ -55,12 +55,14 @@ def get_re_like(guesses):
     for guess in guesses:
         cur_guess= list(guess[0])
         cur_result = list(guess[1])
-        re_like =list(re_like)
+        #convert string to list
+        re_like_lst =list(re_like)
         for element in range(len(cur_guess)):
             if cur_result[element] == 'g':
-               re_like[element] = cur_guess[element]
-               re_like = "".join(re_like)  
-    return "".join(re_like)        
+               re_like_lst[element] = cur_guess[element]
+        #convert list to string
+        re_like = "".join(re_like_lst)  
+    return re_like        
 
 
 def get_re_not_like(guesses):
@@ -106,18 +108,20 @@ def main(guesses):
     Orchastrate result and ouput results
     """
     does_contain_list =contains(guesses, does_contain=True)
-    re_not_like = get_re_not_like(guesses)
-    re_like= get_re_like(guesses)
-    does_not_contain_list= contains (guesses, does_contain=False)
-
     print(does_contain_list)
-    print(does_not_contain_list)
-    print(re_like)
+
+    re_not_like = get_re_not_like(guesses)
     print(re_not_like)
+
+    re_like= get_re_like(guesses)
+    print(re_like)
+
+    does_not_contain_list= contains (guesses, does_contain=False)
+    print(does_not_contain_list)
 
     corpus = get_corpus()
     matching = search_corpus(does_not_contain_list, does_contain_list
-                 , re_not_like, re_like, corpus)
+                , re_not_like, re_like, corpus)
     tokens = count_tokens(matching,1)
 
     # Print results
@@ -127,7 +131,11 @@ def main(guesses):
     print(tokens)
     print( '\n') 
 
-guesses = [ ('tears', 'ybyby'), 
-            ('puree', 'ygygg')
+guesses = [ ('crane', 'bybby'),
+            ('carve', 'bbyby'),
+            ('ovine', 'bbbby'),
+            ('alter', 'bbggg'),
+            ('shear', 'bbybg'),
+            ('smear', 'byybg')
             ]
 main(guesses)
