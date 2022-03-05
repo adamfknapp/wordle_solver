@@ -103,39 +103,56 @@ def contains(guesses, does_contain=True):
     return list(set(res))
 
 
+def clean_guesses(guesses):
+    """
+    validate input
+    """
+    #force lower case
+    guesses = [(guess[0].lower(),guess[1].lower()) for guess in guesses]
+
+    for guess in guesses:
+       # ensure valid colors entered
+       valid_responses = ['b','y','g']
+       diff = [item for item in guess[1] if item not in valid_responses]
+       assert len(diff) == 0, "invalid color" 
+       # ensure correct leng
+       assert (len(guess[0]) == 5 and len (guess[1]) == 5), "invalid length"
+
+    return guesses
+
+
 def main(guesses):
     """
     Orchastrate result and ouput results
     """
+    guesses = clean_guesses(guesses)
     does_contain_list =contains(guesses, does_contain=True)
-    print(does_contain_list)
+    # test for too many letters
+    assert len(does_contain_list)<= 5, "more then 5 matching letters"
 
     re_not_like = get_re_not_like(guesses)
-    print(re_not_like)
-
     re_like= get_re_like(guesses)
-    print(re_like)
 
     does_not_contain_list= contains (guesses, does_contain=False)
-    print(does_not_contain_list)
+    # test for conflicting input
+    assert not any( letter in does_not_contain_list 
+                for letter in does_contain_list), "letter conflict"
 
     corpus = get_corpus()
     matching = search_corpus(does_not_contain_list, does_contain_list
                 , re_not_like, re_like, corpus)
     tokens = count_tokens(matching,1)
+    tokens = [(x[0], x[1]) for x in tokens if x[0] not in does_contain_list] 
 
-    # Print results
+
+    # Print results------
     print('*'*15)
     print(f'{len(matching)} words')
     print(matching)
     print(tokens)
     print( '\n') 
 
-guesses = [ ('crane', 'bybby'),
-            ('carve', 'bbyby'),
-            ('ovine', 'bbbby'),
-            ('alter', 'bbggg'),
-            ('shear', 'bbybg'),
-            ('smear', 'byybg')
+guesses = [ ('crane', 'bbyby')
+            #,('abbey', 'ybbyb')
             ]
 main(guesses)
