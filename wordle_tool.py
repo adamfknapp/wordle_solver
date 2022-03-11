@@ -117,8 +117,34 @@ def clean_guesses(guesses):
        assert len(diff) == 0, "invalid color" 
        # ensure correct leng
        assert (len(guess[0]) == 5 and len (guess[1]) == 5), "invalid length"
-
     return guesses
+
+
+def prod_lst(list):
+    """
+    calculate product of list with base python
+    """
+    prod=1
+    for x in list:
+        prod *= x
+    return prod
+
+
+def word_scores(tokens, corpus, does_contain_list):
+    """
+    Return the the optimum guess from a corpus
+    """
+    word_scores =[]
+    for word in corpus:
+        word_lst = list(set(word))
+        # strip out does contain letters
+        word_lst = [letter for letter in word_lst if letter not in does_contain_list]
+        # score each word as product of token count
+        word_score = prod_lst([dict(tokens)[letter] for letter in word_lst])
+        word_scores.append([word, word_score])
+    # order list
+    word_scores.sort(key=lambda x: x[1], reverse= True) 
+    return word_scores
 
 
 def main(guesses):
@@ -142,17 +168,22 @@ def main(guesses):
     matching = search_corpus(does_not_contain_list, does_contain_list
                 , re_not_like, re_like, corpus)
     tokens = count_tokens(matching,1)
+    # remove known letters
     tokens = [(x[0], x[1]) for x in tokens if x[0] not in does_contain_list] 
 
+    # Determine next guess
+    next_guess = word_scores(tokens, matching, does_contain_list)
+    #next_guess_lst = [x[0] for x in next_guess]
+    print('-'*50)
+    print(f'Guesses        \t {", ".join([x[0] for x in guesses][:10])}')
+    print(f'Next guess:    \t {next_guess[0][0]}')
+    print(f'Possibilities: \t {len(matching)} out of {len(corpus)}')
+    print(f'Top matches:   \t {", ".join([x[0] for x in next_guess][:10])}')
+    print('-'*50)
+    print('')
 
-    # Print results------
-    print('*'*15)
-    print(f'{len(matching)} words')
-    print(matching)
-    print(tokens)
-    print( '\n') 
-
-guesses = [ ('crane', 'bbyby')
-            #,('abbey', 'ybbyb')
+guesses = [  ('react', 'byybb')
+            ,('glean', 'byyyb')
+            #,('salve', 'ygybg')
             ]
 main(guesses)
