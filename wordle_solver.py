@@ -156,9 +156,13 @@ def word_scores(tokens, corpus, does_contain_list):
         word_lst = [letter for letter in word_lst if letter not in does_contain_list]
         # score each word as product of token count
         word_score = prod_lst([dict(tokens)[letter] for letter in word_lst])
+        
         word_scores.append([word, word_score])
     # order list
     word_scores.sort(key=lambda x: x[1], reverse= True) 
+    #standardize word scores
+    top_word_score = word_scores[0][1]
+    word_scores = [ (x[0],x[1]/top_word_score) for x in word_scores]
     return word_scores
 
 
