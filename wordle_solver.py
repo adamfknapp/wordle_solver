@@ -12,8 +12,6 @@ TODO
     #print(next_guess)
     print('-'*50)
     print('')
- 
-
 """
 import re
 
