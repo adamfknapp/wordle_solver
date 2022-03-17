@@ -1,3 +1,20 @@
+
+"""
+TODO 
+    Given a starting word and an answer. How many steps to achive it?
+    failed when the answer is 'tease'. Issue with repeat letters?
+
+    print('-'*50)
+    print(f'Guesses        \t {", ".join([x[0] for x in guesses][:10])}')
+    print(f'Next guess:    \t {next_guess[0][0]}')
+    print(f'Possibilities: \t {len(matching)} out of {len(corpus)}')
+    print(f'Top matches:   \t {", ".join([x[0] for x in next_guess][:10])}')
+    #print(next_guess)
+    print('-'*50)
+    print('')
+ 
+
+"""
 import re
 
 def get_corpus():
@@ -173,17 +190,18 @@ def main(guesses):
 
     # Determine next guess
     next_guess = word_scores(tokens, matching, does_contain_list)
-    #next_guess_lst = [x[0] for x in next_guess]
-    print('-'*50)
-    print(f'Guesses        \t {", ".join([x[0] for x in guesses][:10])}')
-    print(f'Next guess:    \t {next_guess[0][0]}')
-    print(f'Possibilities: \t {len(matching)} out of {len(corpus)}')
-    print(f'Top matches:   \t {", ".join([x[0] for x in next_guess][:10])}')
-    print('-'*50)
-    print('')
+    
+    dict = {
+            'next_guess': next_guess[0][0]
+            ,'possible': len(matching)
+            ,'total_words': len(corpus)
+            , 'top_matches': next_guess[:10]
+            }
+    return dict
+    
 
-guesses = [  ('react', 'byybb')
-            ,('glean', 'byyyb')
-            #,('salve', 'ygybg')
-            ]
-main(guesses)
+
+
+
+if __name__ == '__main__':
+    main(guesses)
