@@ -1,9 +1,10 @@
 
 """
 TODO 
-    Given a starting word and an answer. How many steps to achive it?
     failed when the answer is 'tease'. Issue with repeat letters?
 
+    support multiple game types
+    results: 
 """
 import re
 
@@ -158,7 +159,24 @@ def word_scores(tokens, corpus, does_contain_list):
     return word_scores
 
 
-def main(guesses):
+def get_guess_feedback(guess, answer):
+    """
+    return string for how guess performed
+    """
+    res=list('bbbbb')
+    for index in range(len(guess)):
+        guess_letter = list(guess)[index]
+        answer_letter = list(answer)[index]
+        if guess_letter == answer_letter:
+            res[index] = 'g'
+        elif guess_letter in list(answer):
+            res[index] = 'y'
+        else:
+            res[index] = 'b'
+    return "".join(res)
+
+
+def get_next_guess(guesses):
     """
     Orchastrate result and ouput results
     """
@@ -192,10 +210,22 @@ def main(guesses):
             , 'top_matches': next_guess[:10]
             }
     return dict
-    
 
 
-
-
-if __name__ == '__main__':
-    main(guesses)
+def get_path(first_guess, answer):
+    guesses= []
+    max_guesses = 6
+    for guess in range(max_guesses):
+        if guess == 0:
+            guess_feedback = get_guess_feedback(first_guess, answer)
+            guesses.append((first_guess, guess_feedback))
+            if guess_feedback == 'ggggg':
+                break
+        else:
+            next_guess_data = get_next_guess(guesses) 
+            next_guess = next_guess_data["next_guess"]
+            guess_feedback = get_guess_feedback(next_guess, answer)
+            guesses.append((next_guess, guess_feedback))
+            if guess_feedback == 'ggggg':
+                break   
+    return guesses
